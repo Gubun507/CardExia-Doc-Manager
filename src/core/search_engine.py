@@ -1,5 +1,6 @@
 import sqlite3
 import os
+from src.core.brain_engine import BrainEngine
 
 class SearchEngine:
     def __init__(self, db_path='cardexia_index.db'):
@@ -38,15 +39,11 @@ class SearchEngine:
         return cursor.fetchone()[0]
 
     def search(self, query, limit=50):
-        # Limpieza simple de la consulta para FTS5
-        query_safe = query.replace("'", "''").replace('"', '""')
+        # El Cerebro Interno se encarga de analizar y expandir la consulta semánticamente
+        fts_query = BrainEngine.build_fts5_query(query)
         
-        # Búsqueda tipo prefijo (prefix-matching) para respuestas predictivas
-        terms = [f"{term}*" for term in query_safe.split() if term.strip()]
-        if not terms:
+        if not fts_query:
             return []
-            
-        fts_query = " AND ".join(terms)
         
         cursor = self.conn.cursor()
         try:

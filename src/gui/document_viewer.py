@@ -150,21 +150,23 @@ class DocumentViewer(ctk.CTkToplevel):
                 self.after(2000, lambda: self.math_btn.configure(text="[ ] MODO CALCULADORA", border_color="#00E5FF", text_color="#00E5FF"))
                 return
                 
-            new_text = ""
-            last_idx = 0
+            new_text_lines = []
+            lines = self.original_content.split('\n')
             
-            for res in results:
-                start = res['start']
-                end = res['end']
-                val = res['result']
-                expr = res['expression']
+            # Convertir results a un diccionario de búsqueda rápida por line_idx
+            calc_map = {res['line_idx']: res['calculations'] for res in results}
+            
+            for i, line in enumerate(lines):
+                new_text_lines.append(line)
                 
-                new_text += self.original_content[last_idx:end]
-                # Inyección explícita de fórmula y resultado para verificación del usuario
-                new_text += f"\n\n    >>> [Fórmula detectada: {expr} = {val}] <<<\n"
-                last_idx = end
-                
-            new_text += self.original_content[last_idx:]
+                if i in calc_map:
+                    # Inyectar el razonamiento del Cerebro justo debajo de la línea analizada
+                    for calc in calc_map[i]:
+                        expr = calc['expression']
+                        val = calc['result']
+                        new_text_lines.append(f"\n    >>> [Cerebro Empresarial: {expr} = {val}] <<<\n")
+                        
+            new_text = "\n".join(new_text_lines)
             
             self._update_text(new_text, is_readonly=True)
             self.showing_math = True
