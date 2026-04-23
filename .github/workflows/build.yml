@@ -1,0 +1,79 @@
+name: Build CardExia Doc-Manager
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        pip install -r requirements.txt
+        
+    - name: Create Info.plist for Permissions
+      run: |
+        cat <<EOF > Info.plist
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>NSDesktopFolderUsageDescription</key>
+            <string>CardExia requiere acceso al Escritorio para indexar tus documentos.</string>
+            <key>NSDocumentsFolderUsageDescription</key>
+            <string>CardExia requiere acceso a Documentos para su motor de búsqueda predictiva.</string>
+            <key>NSDownloadsFolderUsageDescription</key>
+            <string>CardExia requiere acceso a Descargas para buscar archivos recientes.</string>
+            <key>NSRemovableVolumesUsageDescription</key>
+            <string>CardExia requiere acceso a Unidades Externas para indexación universal.</string>
+        </dict>
+        </plist>
+        EOF
+
+    - name: Build macOS App
+      run: |
+        pyinstaller --noconfirm --onedir --windowed --name "CardExia_DocManager" --osx-bundle-identifier "com.gubun.cardexia" --info-plist=Info.plist src/main.py
+        
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: CardExia-macOS
+        path: dist/CardExia_DocManager.app
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        pip install -r requirements.txt
+
+    - name: Build Windows Exe
+      run: |
+        pyinstaller --noconfirm --onedir --windowed --name "CardExia_DocManager" src/main.py
+        
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: CardExia-Windows
+        path: dist/CardExia_DocManager
