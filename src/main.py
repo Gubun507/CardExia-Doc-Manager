@@ -191,7 +191,7 @@ class CardExiaSmartSearch(ctk.CTk):
             
             open_btn = ctk.CTkButton(
                 row, 
-                text="ABRIR LECTOR", 
+                text="[ LEER DOC ]", 
                 width=110,
                 font=ctk.CTkFont(weight="bold", size=11),
                 fg_color="transparent",
@@ -201,17 +201,32 @@ class CardExiaSmartSearch(ctk.CTk):
                 hover_color="#39FF14",
                 command=lambda p=path: self.open_document(p)
             )
-            # Hover dinámico: al poner el mouse se pinta el fondo, al quitarlo vuelve a transparente
             open_btn.bind("<Enter>", lambda e, b=open_btn: b.configure(text_color="#0A0A12"))
             open_btn.bind("<Leave>", lambda e, b=open_btn: b.configure(text_color="#39FF14"))
-            open_btn.pack(side="right", padx=15)
+            open_btn.pack(side="right", padx=10)
 
-    def open_document(self, path):
+            calc_btn = ctk.CTkButton(
+                row, 
+                text="[ 🖩 CALCULAR ]", 
+                width=110,
+                font=ctk.CTkFont(weight="bold", size=11),
+                fg_color="transparent",
+                border_color="#00E5FF",
+                border_width=1,
+                text_color="#00E5FF",
+                hover_color="#00E5FF",
+                command=lambda p=path: self.open_document(p, auto_math_mode=True)
+            )
+            calc_btn.bind("<Enter>", lambda e, b=calc_btn: b.configure(text_color="#0A0A12"))
+            calc_btn.bind("<Leave>", lambda e, b=calc_btn: b.configure(text_color="#00E5FF"))
+            calc_btn.pack(side="right", padx=5)
+
+    def open_document(self, path, auto_math_mode=False):
         if not os.path.exists(path):
             messagebox.showerror("Error", "El archivo ya no existe.")
             return
             
-        viewer = DocumentViewer(self, path)
+        viewer = DocumentViewer(self, path, auto_math_mode=auto_math_mode)
         viewer.focus()
 
 if __name__ == "__main__":
