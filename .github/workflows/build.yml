@@ -1,5 +1,8 @@
 name: Build CardExia Doc-Manager
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
     branches: [ "main" ]
@@ -13,7 +16,7 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
         
@@ -22,29 +25,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install pyinstaller
         pip install -r requirements.txt
-        
-    - name: Create Info.plist for Permissions
-      run: |
-        cat <<EOF > Info.plist
-        <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-        <plist version="1.0">
-        <dict>
-            <key>NSDesktopFolderUsageDescription</key>
-            <string>CardExia requiere acceso al Escritorio para indexar tus documentos.</string>
-            <key>NSDocumentsFolderUsageDescription</key>
-            <string>CardExia requiere acceso a Documentos para su motor de búsqueda predictiva.</string>
-            <key>NSDownloadsFolderUsageDescription</key>
-            <string>CardExia requiere acceso a Descargas para buscar archivos recientes.</string>
-            <key>NSRemovableVolumesUsageDescription</key>
-            <string>CardExia requiere acceso a Unidades Externas para indexación universal.</string>
-        </dict>
-        </plist>
-        EOF
 
     - name: Build macOS App
       run: |
-        pyinstaller --noconfirm --onedir --windowed --name "CardExia_DocManager" --osx-bundle-identifier "com.gubun.cardexia" --info-plist=Info.plist src/main.py
+        pyinstaller --noconfirm --onedir --windowed --name "CardExia_DocManager" --osx-bundle-identifier "com.gubun.cardexia" src/main.py
+        
+    - name: Inject macOS Permissions
+      run: |
+        PLIST_FILE="dist/CardExia_DocManager.app/Contents/Info.plist"
+        /usr/libexec/PlistBuddy -c "Add :NSDesktopFolderUsageDescription string 'CardExia requiere acceso al Escritorio para indexar tus documentos.'" "$PLIST_FILE"
+        /usr/libexec/PlistBuddy -c "Add :NSDocumentsFolderUsageDescription string 'CardExia requiere acceso a Documentos para su motor de búsqueda predictiva.'" "$PLIST_FILE"
+        /usr/libexec/PlistBuddy -c "Add :NSDownloadsFolderUsageDescription string 'CardExia requiere acceso a Descargas para buscar archivos recientes.'" "$PLIST_FILE"
+        /usr/libexec/PlistBuddy -c "Add :NSRemovableVolumesUsageDescription string 'CardExia requiere acceso a Unidades Externas para indexación universal.'" "$PLIST_FILE"
         
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
@@ -58,7 +50,7 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
         
