@@ -9,9 +9,8 @@ class MathSolver:
         Retorna una lista de diccionarios con el inicio, fin, expresión y resultado.
         """
         # Expresión regular para encontrar posibles operaciones matemáticas
-        # Busca números (enteros o decimales), seguidos de al menos un operador y otro número.
-        # Permite paréntesis y espacios.
-        pattern = r'(?<![\w\.])(?:[\(\s]*(?:\d+(?:\.\d+)?)[\)\s]*)(?:(?:[\+\-\*\/\^])[\(\s]*(?:\d+(?:\.\d+)?)[\)\s]*)+(?![\w\.])'
+        # Busca números (enteros o decimales, con comas), seguidos de al menos un operador (+-*/^x) y otro número.
+        pattern = r'(?<![\w\.])(?:[\(\s]*(?:\d{1,3}(?:,\d{3})*|\d+)(?:\.\d+)?)[\)\s]*(?:(?:[\+\-\*\/\^xX])[\(\s]*(?:\d{1,3}(?:,\d{3})*|\d+)(?:\.\d+)?)[\)\s]*)+(?![\w\.])'
         
         matches = re.finditer(pattern, text)
         results = []
@@ -30,9 +29,11 @@ class MathSolver:
                 continue
 
             try:
-                # Usar SymPy para evaluar la expresión de forma segura
-                # Convertir ^ a ** para potencias en Python si las hay
-                safe_expr_str = expr_str.replace('^', '**')
+                # Preparar para SymPy:
+                # 1. Quitar comas (separadores de miles)
+                # 2. Convertir ^ a **
+                # 3. Convertir x o X a *
+                safe_expr_str = expr_str.replace(',', '').replace('^', '**').replace('x', '*').replace('X', '*')
                 
                 # Parsear y evaluar
                 expr = sympy.parse_expr(safe_expr_str, evaluate=True)

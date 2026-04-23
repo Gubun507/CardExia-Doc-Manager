@@ -45,6 +45,9 @@ class FileIndexer:
                     if not self.is_indexing:
                         break
                         
+                    # Ceder milisegundos a la CPU para que la GUI no se congele y el SO respire
+                    time.sleep(0.0005)
+                        
                     try:
                         if entry.is_dir(follow_symlinks=False):
                             self._recursive_scan(entry.path)

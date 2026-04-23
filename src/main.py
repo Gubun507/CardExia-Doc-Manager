@@ -151,7 +151,7 @@ class CardExiaSmartSearch(ctk.CTk):
         if len(query) < 2:
             return
 
-        results = self.search_engine.search(query, limit=100)
+        results = self.search_engine.search(query, limit=20)
         
         if not results:
             lbl = ctk.CTkLabel(self.results_frame, text="NO MATCH FOUND", text_color="#FF007F", font=ctk.CTkFont(family="Consolas"))
