@@ -10,7 +10,7 @@ jobs:
   build-mac:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -47,7 +47,7 @@ jobs:
         pyinstaller --noconfirm --onedir --windowed --name "CardExia_DocManager" --osx-bundle-identifier "com.gubun.cardexia" --info-plist=Info.plist src/main.py
         
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: CardExia-macOS
         path: dist/CardExia_DocManager.app
@@ -55,7 +55,7 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -73,7 +73,7 @@ jobs:
         pyinstaller --noconfirm --onedir --windowed --name "CardExia_DocManager" src/main.py
         
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: CardExia-Windows
         path: dist/CardExia_DocManager
