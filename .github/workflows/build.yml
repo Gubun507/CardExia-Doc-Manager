@@ -28,7 +28,7 @@ jobs:
 
     - name: Build macOS App
       run: |
-        pyinstaller --noconfirm --onedir --windowed --name "CardExia_DocManager" --osx-bundle-identifier "com.gubun.cardexia" src/main.py
+        pyinstaller --noconfirm --onedir --windowed --icon=icon.ico --name "CardExia_DocManager" --osx-bundle-identifier "com.gubun.cardexia" src/main.py
         
     - name: Inject macOS Permissions
       run: |
@@ -62,7 +62,7 @@ jobs:
 
     - name: Build Windows Exe
       run: |
-        pyinstaller --noconfirm --onedir --windowed --name "CardExia_DocManager" src/main.py
+        pyinstaller --noconfirm --onedir --windowed --icon=icon.ico --name "CardExia_DocManager" src/main.py
         
     - name: Upload Artifact
       uses: actions/upload-artifact@v4

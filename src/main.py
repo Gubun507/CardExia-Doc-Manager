@@ -20,6 +20,14 @@ class CardExiaSmartSearch(ctk.CTk):
         self.title("CardExia Doc-Manager - Búsqueda Predictiva Universal")
         self.geometry("1100x700")
 
+        # Intentar cargar el icono (si existe)
+        icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "icon.ico")
+        if os.path.exists(icon_path):
+            try:
+                self.iconbitmap(icon_path)
+            except Exception:
+                pass
+
         # Configuración de Tema Neón y Transparencia
         self.configure(fg_color="#0A0A12") # Fondo ultra oscuro
         try:

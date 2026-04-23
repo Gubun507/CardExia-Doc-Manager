@@ -10,12 +10,22 @@ class BrainEngine:
     # Memoria Semántica para expansión de búsquedas
     # Mapea conceptos a sus posibles sinónimos en español/inglés corporativo
     SEMANTIC_MEMORY = {
-        "factura": ["factura", "recibo", "invoice", "comprobante", "ticket", "cobro"],
-        "auto": ["auto", "coche", "vehiculo", "carro", "camioneta", "motor"],
-        "contrato": ["contrato", "acuerdo", "contract", "convenio", "pacto"],
-        "reporte": ["reporte", "informe", "report", "balance", "analisis"],
-        "dinero": ["dinero", "pago", "cash", "efectivo", "transferencia", "deposito", "saldo"],
-        "impuesto": ["impuesto", "iva", "tax", "tributo", "retencion"]
+        # Documentos y Archivos
+        "factura": ["factura", "recibo", "invoice", "comprobante", "ticket", "cobro", "boleta", "voucher"],
+        "contrato": ["contrato", "acuerdo", "contract", "convenio", "pacto", "ndf", "alianza", "licencia"],
+        "reporte": ["reporte", "informe", "report", "balance", "analisis", "estadistica", "auditoria"],
+        "cotizacion": ["cotizacion", "presupuesto", "estimacion", "oferta", "proforma"],
+        
+        # Activos y Finanzas
+        "dinero": ["dinero", "pago", "cash", "efectivo", "transferencia", "deposito", "saldo", "capital", "fondo", "divisa"],
+        "ingreso": ["ingreso", "venta", "ganancia", "beneficio", "rentabilidad", "utilidad", "revenue"],
+        "gasto": ["gasto", "egreso", "costo", "perdida", "compra", "deuda", "pasivo"],
+        "impuesto": ["impuesto", "iva", "tax", "tributo", "retencion", "arancel", "aduana"],
+        "nomina": ["nomina", "salario", "sueldo", "pago", "empleado", "honorarios"],
+        
+        # Objetos físicos comunes en reportes
+        "auto": ["auto", "coche", "vehiculo", "carro", "camioneta", "motor", "transporte", "flota"],
+        "inmueble": ["inmueble", "casa", "edificio", "oficina", "propiedad", "local", "bodega", "terreno"]
     }
 
     @classmethod
